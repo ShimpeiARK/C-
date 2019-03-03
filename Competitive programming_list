@@ -1,0 +1,781 @@
+//ABC10/12/20/49/61/110/114/117
+
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
+
+int n,g,e;
+int link[110][110];
+int visited[110];
+int used[110];
+
+int dfs(int s){
+  if(s==n) return 1;
+  used[s]=1;
+  for(int i=0;i<=n;i++){
+    if(used[i])continue;
+    if(link[s][i]!=0 && !visited[i] && dfs(i)){
+      if(link[i][s]==1){
+        link[i][s]=-1;
+        link[s][i]=0;
+      }else{
+        link[i][s]=1;
+        link[s][i]=0;
+      }
+      used[s]=0;
+      return 1;
+    }else if(link[s][i]!=0) visited[i]=1;
+  }
+  used[s]=0;
+  return 0;
+}
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cin >> n >> g >> e;
+  for(int i=0;i<g;i++){
+    int p;
+    cin >> p;
+    link[p][n]=1;
+    link[n][p]=1;
+  }
+  for(int i=0;i<e;i++){
+    int a,b;
+    cin >> a >> b;
+    link[a][b]=1;
+    link[b][a]=1;
+  }
+  int ans=0;
+  while(dfs(0)){
+    ans++;
+    for(int i=0;i<=n;i++) visited[i]=0;
+  }
+  cout << ans << endl;
+  return 0;
+}
+//ABC010
+=====================================================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
+
+int dx[]={1,-1,0,0};
+int dy[]={0,0,1,-1};
+
+const ll INFA=10000000000;
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  ll H,W,T;
+  cin >> H >> W >> T;
+  char a[120][120];
+  ll S,G;
+  for(int i=0;i<H;i++){
+    for(int j=0;j<W;j++){
+      cin >> a[i][j];
+      if(a[i][j]=='S') S=i*10+j;
+      if(a[i][j]=='G') G=i*10+j;
+    }
+  }
+  ll lb=1,ub=T;
+  while(ub-lb>1){
+    ll dp[120][120];
+    ll mid=(ub+lb)/2;
+    for(int i=0;i<120;i++){
+      for(int j=0;j<120;j++){
+        if(i==j)dp[i][j]=0;
+        else dp[i][j]=INFA;
+      }
+    }
+    for(int i=0;i<H;i++){
+      for(int j=0;j<W;j++){
+        for(int k=0;k<4;k++){
+          int x=i+dx[k],y=j+dy[k];
+          if(x<0||y<0||x>=H||y>=W)continue;
+          int ins=(a[x][y]=='#'?mid:1);
+          dp[i*10+j][x*10+y]=ins;
+        }
+      }
+    }
+    for(int k=0;k<120;k++){
+      for(int i=0;i<120;i++){
+        for(int j=0;j<120;j++){
+          dp[i][j]=min(dp[i][j],dp[i][k]+dp[k][j]);
+        }
+      }
+    }
+    if(dp[S][G]<=1LL*T) lb=mid;
+    else ub=mid;
+  }
+  cout << lb << endl;
+  return 0;
+}
+// ABC020
+=====================================================
+
+int N,M;
+bool visited[100100];
+int dp[100100]={0};
+vector<int> G[100100],v;
+
+void dfs(int s){
+  visited[s]=1;
+  for(int i=0;i<G[s].size();i++){
+    if(!visited[G[s][i]]){
+      dfs(G[s][i]);
+    }
+  }
+  v.push_back(s);
+}
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  ll N,M;
+  cin >> N >> M;
+  int x,y;
+  for(int i=0;i<M;i++){
+    cin >> x >>y;
+    x--;
+    y--;
+    G[x].push_back(y);
+  }
+
+  for(int i=0;i<N;i++){
+    if(!visited[i]){
+      dfs(i);
+    }
+  }
+  reverse(v.begin(),v.end());
+
+ int ans=0;
+ for(int i=0;i<N;i++){
+   for(int j=0;j<G[v[i]].size();j++){
+     dp[G[v[i]][j]]=max(dp[G[v[i]][j]],dp[v[i]]+1);
+   }
+   ans=max(ans,dp[v[i]]);
+ }
+ cout << ans << endl;
+ return 0;
+}
+
+=====================================================
+vector<ll> G[100100];
+ll dp[100100];
+bool used[100100];
+
+ll dijkstra(ll s){
+  if(used[s]) return dp[s];
+  for(auto e:G[s]){
+    dp[s]=max(dp[s],dijkstra(e)+1);
+  }
+  used[s]=true;
+  return dp[s];
+}
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  ll N,M;
+  cin >> N >> M;
+  int x,y;
+  for(int i=0;i<M;i++){
+    cin >> x >>y;
+    x--;
+    y--;
+    G[x].push_back(y);
+  }
+  for(int i=0;i<N;i++){
+    dp[i]=0;
+  }
+  ll ans=0;
+  for(int i=0;i<N;i++){
+    ans = dijkstra(i);
+  }
+  for(int i=0;i<N;i++){
+    ans=max(ans,dp[i]);
+  }
+  cout << ans << endl;
+  return 0;
+}
+// Educational DP G問題
+=====================================================
+
+vector<P> G[310];
+int N,M;
+const int INFA=30000000;
+
+int dijkstra(int s){
+  priority_queue<pair<int,int>> Q;
+  Q.push({s,0});
+  int dp[310];
+  fill(dp,dp+310,INFA);
+  dp[s]=0;
+
+  while(!Q.empty()){
+    P q=Q.top();
+    Q.pop();
+    int v=q.first;
+    for(auto e:G[v]){
+      if(dp[e.first]>dp[v]+e.second){
+        dp[e.first]=dp[v]+e.second;
+        Q.push({e.first,dp[e.first]});
+      }
+    }
+  }
+  int cnt=0;
+  for(int i=0;i<N;i++){
+    if(dp[i]==INFA)continue;
+    cnt=max(cnt,dp[i]);
+  }
+  return cnt;
+}
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cin >> N >> M;
+  int a,b,t;
+  for(int i=0;i<M;i++){
+    cin >> a >> b >> t;
+    a--;
+    b--;
+    G[a].push_back({b,t});
+    G[b].push_back({a,t});
+  }
+  int ans=1000000000;
+  for(int i=0;i<N;i++){
+    ans=min(ans,dijkstra(i));
+  }
+  cout << ans << endl;
+  return 0;
+}
+// ABC12
+=====================================================
+ll N,M;
+cin >> N >> M;
+
+ll a[2020],b[2020],c[2020];
+for(int i=0;i<M;i++){
+  cin >> a[i] >> b[i] >> c[i];
+  a[i]--;
+  b[i]--;
+  c[i]=-c[i];
+}
+ll dp[1010];
+const ll INFA=1LL<<50;
+
+for(int i=0;i<1010;i++){
+  dp[i]=INFA;
+}
+dp[0]=0;
+
+for(int i=0;i<N-1;i++){
+  for(int j=0;j<M;j++){
+    if(dp[a[j]]==INFA) continue;
+    if(dp[b[j]]>dp[a[j]]+c[j]){
+      dp[b[j]]=dp[a[j]]+c[j];
+    }
+  }
+}
+ll ans=dp[N-1];
+
+for(int i=0;i<N-1;i++){
+  for(int j=0;j<M;j++){
+    if(dp[a[j]]==INFA) continue;
+    if(dp[b[j]]>dp[a[j]]+c[j]){
+      dp[b[j]]=dp[a[j]]+c[j];
+    }
+  }
+}
+if(dp[N-1]!=ans) cout << "inf" << endl;
+else cout << -ans << endl;
+return 0;
+}
+=====================================================
+class UnionFind {
+public:
+    vector<int> par, rank;
+    int cnt;
+
+    UnionFind(int n) : cnt(n) {
+        par = vector<int>(n);
+        iota(par.begin(), par.end(), 0);
+        rank = vector<int>(n, 0);
+    }
+
+    int root(int x) {
+        if (par[x] == x) {
+            return x;
+        } else {
+            return par[x] = root(par[x]);
+        }
+    }
+
+    void unite(int x, int y) {
+        x = root(x);
+        y = root(y);
+        if (x == y) return;
+        if (rank[x] < rank[y]) {
+            par[x] = y;
+        } else {
+            par[y] = x;
+            if (rank[x] == rank[y]) rank[x]++;
+        }
+        cnt--;
+    }
+
+    bool same(int x, int y) {
+        return root(x) == root(y);
+    }
+};
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  int N,K,L;
+  cin >> N >> K >> L;
+  UnionFind uf1=UnionFind(N);
+  UnionFind uf2=UnionFind(N);
+  int p,q;
+  for(int i=0;i<K;i++){
+    cin >> p >> q;
+    p--,q--;
+    uf1.unite(p,q);
+  }
+  int r,s;
+  for(int i=0;i<L;i++){
+    cin >> r >> s;
+    r--,s--;
+    uf2.unite(r,s);
+  }
+  int root1[N];
+  int root2[N];
+  map<P,ll> mp;
+  for(int i=0;i<N;i++){
+    root1[i]=uf1.root(i);
+    root2[i]=uf2.root(i);
+    mp[{root1[i],root2[i]}]++;
+  }
+
+  for(int i=0;i<N;i++){
+    cout << mp[{root1[i],root2[i]}];
+    if(i!=N-1) cout << " ";
+    else break;
+  }
+  cout << endl;
+  return 0;
+}
+
+// ABC49
+=====================================================
+int N;
+cin >> N;
+map<int,int> mp;
+
+for(int i=0;i<110;i++){
+  mp[i]=0;
+}
+
+for(int i=2;i<=N;i++){
+  int k=i;
+  int l=2;
+  while(k>1){
+    if(k%l==0){
+      mp[l]++;
+      k/=l;
+    }else{
+      l++;
+    }
+  }
+}
+int a=0,b=0,c=0,d=0,e=0;
+for(auto f:mp){
+  if(f.second>=74)a++;
+  if(f.second>=24)b++;
+  if(f.second>=14)c++;
+  if(f.second>=4)d++;
+  if(f.second>=2)e++;
+}
+int ans=a+b*(e-1)+c*(d-1)+d*(d-1)/2*(e-2);
+cout << ans << endl;
+return 0;
+}
+// ABC114
+
+=====================================================
+
+const int MAX = 510000;
+
+long long fac[MAX], finv[MAX], inv[MAX];
+
+// テーブルを作る前処理
+void COMinit() {
+    fac[0] = fac[1] = 1;
+    finv[0] = finv[1] = 1;
+    inv[1] = 1;
+    for (int i = 2; i < MAX; i++){
+        fac[i] = fac[i - 1] * i % MOD;
+        inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;
+        finv[i] = finv[i - 1] * inv[i] % MOD;
+    }
+}
+
+// 二項係数計算
+long long COM(int n, int k){
+    if (n < k) return 0;
+    if (n < 0 || k < 0) return 0;
+    return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD;
+}
+
+// NのP乗をMで割った余りを返す
+ll pow_mod(ll n,ll k,ll m){
+  if(k==0){
+    return 1;
+  }else if(k%2==1){
+    return pow_mod(n,k-1,m)*n%m;
+  }else{
+    ll t=pow_mod(n,k/2,m);
+    return (t*t)%m;
+  }
+}
+
+//(10*9*8)/(3*2*1);
+//10*9*8 -> ansMul
+//3*2*1 -> ansDiv
+long calcComb(int a, int b) {
+	if (b > a - b) return calcComb(a, a - b);
+
+
+	long ansMul = 1;
+	long ansDiv = 1;
+	for (int i = 0; i < b; i++)
+	{
+		ansMul *= (a - i);
+		ansDiv *= (i + 1);
+		ansMul %= MOD;
+		ansDiv %= MOD;
+	}
+	//ansMul / ansDivをやりたい
+	//ansDivの逆元を使って求めよう！
+
+	long ans = ansMul * pow_mod(ansDiv,MOD - 2,MOD);
+	return ans;
+}
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  int N,M;
+  cin >> N >> M;
+  map<int,int> m;
+  for(int i=2;i*i<=M;i++){
+    while(M%i==0){
+      m[i]++;
+      M/=i;
+    }
+  }
+  if(M!=1)m[M]++;
+  COMinit();
+  ll ans=1;
+  for(auto e:m){
+    ans*=calcComb(N-1+e.second,N-1)%MOD;
+    ans%=MOD;
+  }
+  cout << ans << endl;
+  return 0;
+}
+//ABC_110
+=====================================================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  ll N,K;
+  cin >> N >> K;
+  vector<ll> A(N);
+
+  for(int i=0;i<N;i++){
+    cin >> A[i];
+  }
+  ll sum=0;
+  for(int i=62;i>=0;i--){
+    ll x=0;
+    for(int j=0;j<N;j++){
+      x+=(A[j]>> i &1);
+    }
+    if(N>2*x && (sum|(1LL<<i))<=K){
+      sum|=1LL<<i;
+    }
+  }
+  ll ans=0;
+  for(int i=0;i<N;i++){
+    ans+=sum^A[i];
+  }
+  cout << ans << endl;
+  return 0;
+}
+// ABC117
+=====================================================
+ll N,M;
+cin >> N >> M;
+ll a[2020],b[2020],c[2020];
+ll dp[1010];
+const ll INFA =1LL<<50;
+for(int i=0;i<1010;i++){
+    dp[i]=INFA;
+}
+ll p,q,r;
+for(int i=0;i<M;i++){
+  cin >> p >> q >> r;
+  p--;
+  q--;
+  r=-r;
+  a[i]=p;
+  b[i]=q;
+  c[i]=r;
+}
+dp[0]=0;
+for(int i=0;i<N-1;i++){
+  for(int j=0;j<M;j++){
+    if(dp[a[j]]==INFA)continue;
+    if(dp[b[j]]>dp[a[j]]+c[j]){
+      dp[b[j]]=dp[a[j]]+c[j];
+    }
+  }
+}
+
+ll distance=dp[N-1];
+
+for(int i=0;i<N-1;i++){
+  for(int j=0;j<M;j++){
+    if(dp[a[j]]==INFA)continue;
+    if(dp[b[j]]>dp[a[j]]+c[j]){
+      dp[b[j]]=dp[a[j]]+c[j];
+    }
+  }
+}
+ll ans=dp[N-1];
+
+if(ans!=distance){
+  cout << "inf" << endl;
+}else{
+  cout << -distance << endl;
+}
+return 0;
+}
+
+// ABC_61_bellman-Ford_dp
+=====================================================
+
+vector<pair<int,int>> G[400];
+int N,M;
+int dst[400];
+const int INFA=30000000;
+
+int dijkstra(int s){
+  priority_queue<pair<int,int>> Q;
+  Q.push({s,0});
+  fill(dst,dst+N,INFA);
+  dst[s]=0;
+
+  while(!Q.empty()){
+    pair<int,int> p=Q.top();
+    Q.pop();
+    int v=p.first;
+    for(auto e:G[v]){
+      if(dst[e.first]>dst[v]+e.second){
+        dst[e.first]=dst[v]+e.second;
+        Q.push({e.first,dst[e.first]});
+      }
+    }
+  }
+  int time=0;
+  for(int i=0;i<N;i++){
+    if(dst[i]==INFA)continue;
+    time=max(time,dst[i]);
+  }
+  return time;
+}
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cin >> N >> M;
+  int a,b,t;
+  for(int i=0;i<M;i++){
+    cin >> a >> b >> t;
+    a--,b--;
+    G[a].push_back({b,t});
+    G[b].push_back({a,t});
+  }
+  int ans=INFA;
+  for(int i=0;i<N;i++){
+    ans=min(ans,dijkstra(i));
+  }
+  cout << ans << endl;
+  return 0;
+}
+
+// ABC_10_dijkstra_vector_priority_queue
+=====================================================
+const ll INF=10000000000;
+int dx[4]={1,-1,0,0};
+int dy[4]={0,0,1,-1};
+
+int main(){
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  int H,W,T;
+  cin >> H >> W >> T;
+  char a[110][110];
+  int S,G;
+  for(int i=0;i<H;i++){
+    for(int j=0;j<W;j++){
+      cin >> a[i][j];
+      if(a[i][j]=='S'){
+        S=i*10+j;
+      }else if(a[i][j]=='G'){
+        G=i*10+j;
+      }
+    }
+  }
+  ll lb=1,ub=T;
+  while(lb+1<ub){
+    ll mid=(lb+ub)/2;
+    ll dp[120][120];
+    for(int i=0;i<120;i++){
+      for(int j=0;j<120;j++){
+        dp[i][j]=INF;
+        if(i==j)dp[i][j]=0;
+      }
+    }
+    for(int i=0;i<H;i++){
+      for(int j=0;j<W;j++){
+        for(int k=0;k<4;k++){
+          int n=i+dx[k],m=j+dy[k];
+          if(n<0 ||m<0 || n>=H || m>=W)continue;
+          ll ins=(a[n][m]=='#'?mid:1);
+          dp[i*10+j][n*10+m]=ins;
+        }
+      }
+    }
+   for(int k=0;k<120;k++){
+     for(int i=0;i<120;i++){
+       for(int j=0;j<120;j++){
+         dp[i][j]=min(dp[i][j],dp[i][k]+dp[k][j]);
+       }
+     }
+   }
+   if(dp[S][G] <=1LL*T) lb=mid;
+   else ub=mid;
+  }
+  cout << lb << endl;
+  return 0;
+}
+
+// ABC_20_ワーシャル_にぶたん_探索_座標変換
