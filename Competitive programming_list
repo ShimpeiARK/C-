@@ -1,5 +1,9 @@
-//ABC10/12/20/49/61/110/114/117
+//AtCorder株式会社による競技プログラミング大会の自分が書いた回答集
+//URL :  https://atcoder.jp/
+//Atcorder Beginner Contests 10/12/20/49/61/110/114/117回目の問題
 
+
+//=================ABC010================================
 #include <iostream>
 #include <algorithm>
 #include <cmath>
@@ -37,10 +41,13 @@ map <int ,int> mpa,mpb;
 typedef pair<ll, ll> P;
 priority_queue<P, vector<P>, greater<P>> pque;
 
+//最小カット最大フロー問題_訪れたことを認識する配列たちを定義
 int n,g,e;
 int link[110][110];
 int visited[110];
 int used[110];
+
+//幅優先探索で解く
 
 int dfs(int s){
   if(s==n) return 1;
@@ -62,6 +69,8 @@ int dfs(int s){
   used[s]=0;
   return 0;
 }
+//数字を受け取る
+//その後2次元配列で要素同士をつなぐ
 
 int main(){
   ios::sync_with_stdio(false);
@@ -87,8 +96,8 @@ int main(){
   cout << ans << endl;
   return 0;
 }
-//ABC010
-=====================================================
+
+// ABC020=============================================
 #include <iostream>
 #include <algorithm>
 #include <cmath>
@@ -138,6 +147,7 @@ int main(){
   cin >> H >> W >> T;
   char a[120][120];
   ll S,G;
+  //座標圧縮で処理を見やすくする
   for(int i=0;i<H;i++){
     for(int j=0;j<W;j++){
       cin >> a[i][j];
@@ -145,6 +155,7 @@ int main(){
       if(a[i][j]=='G') G=i*10+j;
     }
   }
+  //二分探索で最適解を算出
   ll lb=1,ub=T;
   while(ub-lb>1){
     ll dp[120][120];
@@ -155,6 +166,7 @@ int main(){
         else dp[i][j]=INFA;
       }
     }
+    //座標探索
     for(int i=0;i<H;i++){
       for(int j=0;j<W;j++){
         for(int k=0;k<4;k++){
@@ -165,6 +177,7 @@ int main(){
         }
       }
     }
+    //ワーシャルフロイド法で，各点の最小距離を算出
     for(int k=0;k<120;k++){
       for(int i=0;i<120;i++){
         for(int j=0;j<120;j++){
@@ -178,13 +191,52 @@ int main(){
   cout << lb << endl;
   return 0;
 }
-// ABC020
-=====================================================
+
+//ABC========================================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
+//訪れる場所の配列を定義
 
 int N,M;
 bool visited[100100];
 int dp[100100]={0};
 vector<int> G[100100],v;
+
+//幅優先探索を利用
 
 void dfs(int s){
   visited[s]=1;
@@ -196,6 +248,7 @@ void dfs(int s){
   v.push_back(s);
 }
 
+//数字を受け取り，一次元配列で各点の要素を結ぶ
 int main(){
   ios::sync_with_stdio(false);
   cin.tie(NULL);
@@ -208,14 +261,14 @@ int main(){
     y--;
     G[x].push_back(y);
   }
-
+//幅優先探索
   for(int i=0;i<N;i++){
     if(!visited[i]){
       dfs(i);
     }
   }
   reverse(v.begin(),v.end());
-
+//動的計画法により最大距離を算出
  int ans=0;
  for(int i=0;i<N;i++){
    for(int j=0;j<G[v[i]].size();j++){
@@ -223,15 +276,56 @@ int main(){
    }
    ans=max(ans,dp[v[i]]);
  }
+ //答えを出力
  cout << ans << endl;
  return 0;
 }
 
-=====================================================
+// Educational DP G問題=========================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
+//訪れる場所を配列で確保
+
 vector<ll> G[100100];
 ll dp[100100];
 bool used[100100];
 
+//ダイクストラ法で．全ての点の要素を訪れる
+//メモ化により計算量を削減，コードを簡潔に
 ll dijkstra(ll s){
   if(used[s]) return dp[s];
   for(auto e:G[s]){
@@ -240,7 +334,7 @@ ll dijkstra(ll s){
   used[s]=true;
   return dp[s];
 }
-
+//入力を受け取り，一次元配列で訪れる要素を結ぶ
 int main(){
   ios::sync_with_stdio(false);
   cin.tie(NULL);
@@ -253,6 +347,8 @@ int main(){
     y--;
     G[x].push_back(y);
   }
+  //初期化
+  
   for(int i=0;i<N;i++){
     dp[i]=0;
   }
@@ -263,23 +359,63 @@ int main(){
   for(int i=0;i<N;i++){
     ans=max(ans,dp[i]);
   }
+  //答えを出力
   cout << ans << endl;
   return 0;
 }
-// Educational DP G問題
-=====================================================
 
+// ABC12===============================================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
+//配列を確保
 vector<P> G[310];
 int N,M;
-const int INFA=30000000;
+const int INFA=30000000; //INFA ==INF(巨大な数字)と同じ
 
+//ダイクストラ法の関数を定義
 int dijkstra(int s){
   priority_queue<pair<int,int>> Q;
+  //優先度付きキューで実装
   Q.push({s,0});
   int dp[310];
+  //初期化
   fill(dp,dp+310,INFA);
   dp[s]=0;
-
+  //
   while(!Q.empty()){
     P q=Q.top();
     Q.pop();
@@ -298,7 +434,7 @@ int dijkstra(int s){
   }
   return cnt;
 }
-
+//入力を受け取り，要素と要素間の距離を一次元配列で確保
 int main(){
   ios::sync_with_stdio(false);
   cin.tie(NULL);
@@ -311,6 +447,7 @@ int main(){
     G[a].push_back({b,t});
     G[b].push_back({a,t});
   }
+  //ダイクストラを用いて最小値を探索
   int ans=1000000000;
   for(int i=0;i<N;i++){
     ans=min(ans,dijkstra(i));
@@ -318,19 +455,62 @@ int main(){
   cout << ans << endl;
   return 0;
 }
-// ABC12
+
 =====================================================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
+//main関数の中身
+//入力を受け取る
 ll N,M;
 cin >> N >> M;
 
+//配列の確保
 ll a[2020],b[2020],c[2020];
+//入力を受け取る
+//添字は0
 for(int i=0;i<M;i++){
   cin >> a[i] >> b[i] >> c[i];
   a[i]--;
   b[i]--;
   c[i]=-c[i];
 }
+
 ll dp[1010];
+//大きな数字で初期化
 const ll INFA=1LL<<50;
 
 for(int i=0;i<1010;i++){
@@ -361,6 +541,45 @@ else cout << -ans << endl;
 return 0;
 }
 =====================================================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
+//UnionFind木による，木構造の実装
+//各配列がどの木に属し，親が何かを算出
+
 class UnionFind {
 public:
     vector<int> par, rank;
@@ -397,7 +616,7 @@ public:
         return root(x) == root(y);
     }
 };
-
+//入力を受け取り
 int main(){
   ios::sync_with_stdio(false);
   cin.tie(NULL);
@@ -406,11 +625,13 @@ int main(){
   UnionFind uf1=UnionFind(N);
   UnionFind uf2=UnionFind(N);
   int p,q;
+  //要素同士をUnionFind木で実装し，繋げる
   for(int i=0;i<K;i++){
     cin >> p >> q;
     p--,q--;
     uf1.unite(p,q);
   }
+  //要素同士をUnionFind木で実装し，繋げる
   int r,s;
   for(int i=0;i<L;i++){
     cin >> r >> s;
@@ -420,6 +641,7 @@ int main(){
   int root1[N];
   int root2[N];
   map<P,ll> mp;
+   //親を探す(rootの探索)
   for(int i=0;i<N;i++){
     root1[i]=uf1.root(i);
     root2[i]=uf2.root(i);
@@ -437,6 +659,42 @@ int main(){
 
 // ABC49
 =====================================================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
+
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
 int N;
 cin >> N;
 map<int,int> mp;
@@ -444,6 +702,8 @@ map<int,int> mp;
 for(int i=0;i<110;i++){
   mp[i]=0;
 }
+//数学的処理，素数の関係
+//説明は別紙
 
 for(int i=2;i<=N;i++){
   int k=i;
@@ -472,7 +732,42 @@ return 0;
 // ABC114
 
 =====================================================
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
+#include <cstdio>
+#include <bits/stdc++.h>
+#include <set>
+#include <map>
+#include <stdio.h>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <numeric>
+#include <bits/stdc++.h>
+#include <utility>
+#include <iomanip>
 
+#define ALL(obj) (obj).begin(), (obj).end()
+#define FOR(i,a,b) for(int i = (a); i < (b); i++)
+#define RFOR(i,a,b) for(int i = (a); (b) <= i; i--)
+#define REP(i,n) for(int i = 0; i < (n); i++)
+#define RREP(i,n) for(int i = n; n <= i; i--)
+#define ABS(a) ((a < 0) ? ((-1)*(a)) : (a))
+#define elif else if
+#define MOD 1000000007
+#define INF (1<<29)
+
+using namespace std;
+
+#define ld long double
+#define ll long long
+
+map <int ,int> mpa,mpb;
+typedef pair<ll, ll> P;
+priority_queue<P, vector<P>, greater<P>> pque;
 const int MAX = 510000;
 
 long long fac[MAX], finv[MAX], inv[MAX];
@@ -535,6 +830,7 @@ int main(){
   ios::sync_with_stdio(false);
   cin.tie(NULL);
   int N,M;
+  //入力を受け取る
   cin >> N >> M;
   map<int,int> m;
   for(int i=2;i*i<=M;i++){
@@ -543,9 +839,11 @@ int main(){
       M/=i;
     }
   }
+  //初期化
   if(M!=1)m[M]++;
   COMinit();
   ll ans=1;
+  //二項係数を用いて計算
   for(auto e:m){
     ans*=calcComb(N-1+e.second,N-1)%MOD;
     ans%=MOD;
@@ -598,184 +896,29 @@ int main(){
   ll N,K;
   cin >> N >> K;
   vector<ll> A(N);
-
+//入力を受け取る
   for(int i=0;i<N;i++){
     cin >> A[i];
   }
   ll sum=0;
+  //Bit演算子による処理
   for(int i=62;i>=0;i--){
     ll x=0;
     for(int j=0;j<N;j++){
       x+=(A[j]>> i &1);
     }
+    //各Bitが立っているか計算
     if(N>2*x && (sum|(1LL<<i))<=K){
       sum|=1LL<<i;
     }
   }
+  //XORの計算を行う
   ll ans=0;
   for(int i=0;i<N;i++){
     ans+=sum^A[i];
   }
+  //答えを出力
   cout << ans << endl;
   return 0;
 }
 // ABC117
-=====================================================
-ll N,M;
-cin >> N >> M;
-ll a[2020],b[2020],c[2020];
-ll dp[1010];
-const ll INFA =1LL<<50;
-for(int i=0;i<1010;i++){
-    dp[i]=INFA;
-}
-ll p,q,r;
-for(int i=0;i<M;i++){
-  cin >> p >> q >> r;
-  p--;
-  q--;
-  r=-r;
-  a[i]=p;
-  b[i]=q;
-  c[i]=r;
-}
-dp[0]=0;
-for(int i=0;i<N-1;i++){
-  for(int j=0;j<M;j++){
-    if(dp[a[j]]==INFA)continue;
-    if(dp[b[j]]>dp[a[j]]+c[j]){
-      dp[b[j]]=dp[a[j]]+c[j];
-    }
-  }
-}
-
-ll distance=dp[N-1];
-
-for(int i=0;i<N-1;i++){
-  for(int j=0;j<M;j++){
-    if(dp[a[j]]==INFA)continue;
-    if(dp[b[j]]>dp[a[j]]+c[j]){
-      dp[b[j]]=dp[a[j]]+c[j];
-    }
-  }
-}
-ll ans=dp[N-1];
-
-if(ans!=distance){
-  cout << "inf" << endl;
-}else{
-  cout << -distance << endl;
-}
-return 0;
-}
-
-// ABC_61_bellman-Ford_dp
-=====================================================
-
-vector<pair<int,int>> G[400];
-int N,M;
-int dst[400];
-const int INFA=30000000;
-
-int dijkstra(int s){
-  priority_queue<pair<int,int>> Q;
-  Q.push({s,0});
-  fill(dst,dst+N,INFA);
-  dst[s]=0;
-
-  while(!Q.empty()){
-    pair<int,int> p=Q.top();
-    Q.pop();
-    int v=p.first;
-    for(auto e:G[v]){
-      if(dst[e.first]>dst[v]+e.second){
-        dst[e.first]=dst[v]+e.second;
-        Q.push({e.first,dst[e.first]});
-      }
-    }
-  }
-  int time=0;
-  for(int i=0;i<N;i++){
-    if(dst[i]==INFA)continue;
-    time=max(time,dst[i]);
-  }
-  return time;
-}
-
-int main(){
-  ios::sync_with_stdio(false);
-  cin.tie(NULL);
-  cin >> N >> M;
-  int a,b,t;
-  for(int i=0;i<M;i++){
-    cin >> a >> b >> t;
-    a--,b--;
-    G[a].push_back({b,t});
-    G[b].push_back({a,t});
-  }
-  int ans=INFA;
-  for(int i=0;i<N;i++){
-    ans=min(ans,dijkstra(i));
-  }
-  cout << ans << endl;
-  return 0;
-}
-
-// ABC_10_dijkstra_vector_priority_queue
-=====================================================
-const ll INF=10000000000;
-int dx[4]={1,-1,0,0};
-int dy[4]={0,0,1,-1};
-
-int main(){
-  ios::sync_with_stdio(false);
-  cin.tie(NULL);
-  int H,W,T;
-  cin >> H >> W >> T;
-  char a[110][110];
-  int S,G;
-  for(int i=0;i<H;i++){
-    for(int j=0;j<W;j++){
-      cin >> a[i][j];
-      if(a[i][j]=='S'){
-        S=i*10+j;
-      }else if(a[i][j]=='G'){
-        G=i*10+j;
-      }
-    }
-  }
-  ll lb=1,ub=T;
-  while(lb+1<ub){
-    ll mid=(lb+ub)/2;
-    ll dp[120][120];
-    for(int i=0;i<120;i++){
-      for(int j=0;j<120;j++){
-        dp[i][j]=INF;
-        if(i==j)dp[i][j]=0;
-      }
-    }
-    for(int i=0;i<H;i++){
-      for(int j=0;j<W;j++){
-        for(int k=0;k<4;k++){
-          int n=i+dx[k],m=j+dy[k];
-          if(n<0 ||m<0 || n>=H || m>=W)continue;
-          ll ins=(a[n][m]=='#'?mid:1);
-          dp[i*10+j][n*10+m]=ins;
-        }
-      }
-    }
-   for(int k=0;k<120;k++){
-     for(int i=0;i<120;i++){
-       for(int j=0;j<120;j++){
-         dp[i][j]=min(dp[i][j],dp[i][k]+dp[k][j]);
-       }
-     }
-   }
-   if(dp[S][G] <=1LL*T) lb=mid;
-   else ub=mid;
-  }
-  cout << lb << endl;
-  return 0;
-}
-
-// ABC_20_ワーシャル_にぶたん_探索_座標変換
